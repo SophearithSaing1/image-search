@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import './App.css';
+import Images from './components/Images';
 import Search from './components/Search';
 import Spinner from './components/Spinner';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
+  const [images, setImages] = useState([]);
 
   function search(query) {
     setIsLoading(true);
@@ -13,7 +15,7 @@ function App() {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        setImages(data.results);
         setIsLoading(false);
       });
   }
@@ -23,6 +25,7 @@ function App() {
       <h1>Image Search</h1>
       <Search search={search} />
       {isLoading && <Spinner />}
+      {images.length > 0 && !isLoading && <Images images={images} />}
     </div>
   );
 }

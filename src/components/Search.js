@@ -10,12 +10,11 @@ function Search({ search }) {
 
   function searchHandler() {
     search(query);
-    setQuery('');
   }
 
   function keyUpHandler(event) {
     if (event.key === 'Enter') {
-      searchHandler();
+      search(query);
     }
   }
 
