@@ -5,20 +5,44 @@ import Search from './components/Search';
 import Spinner from './components/Spinner';
 
 function App() {
-  const [isLoading, setIsLoading] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [images, setImages] = useState([]);
-  const [query, setQuery] = useState('');
+  const [error, setError] = useState(null);
+
+  function showErrorMessage(query) {
+    if (query) {
+      setError(`There's no result for ${query}`);
+    } else {
+      setError('Something went wrong, please try again later!');
+    }
+    setIsLoading(false);
+  }
 
   function search(query) {
-    setQuery(query);
     setIsLoading(true);
+    setError(null);
+    setImages([]);
     fetch(
       `https://api.unsplash.com/search/photos?client_id=${process.env.REACT_APP_UNSPLASH_ACCESS_KEY}&query=${query}&per_page=12`,
     )
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          showErrorMessage();
+        }
+      })
       .then((data) => {
-        setImages(data.results);
-        setIsLoading(false);
+        if (data.results.length === 0) {
+          showErrorMessage(query);
+        } else {
+          setImages(data.results);
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => {
+        console.log(error.message);
+        showErrorMessage();
       });
   }
 
@@ -27,10 +51,8 @@ function App() {
       <h1>Image Search</h1>
       <Search search={search} />
       {isLoading && <Spinner />}
-      {isLoading === false && images.length === 0 && (
-        <p className="no-result">There's no results for {query}</p>
-      )}
-      {isLoading === false && images.length > 0 && <Images images={images} />}
+      {!isLoading && error && <p className="error">{error}</p>}
+      {!isLoading && images.length > 0 && <Images images={images} />}
     </div>
   );
 }

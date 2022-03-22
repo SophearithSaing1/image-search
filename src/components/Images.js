@@ -4,7 +4,7 @@ function Images({ images }) {
   return (
     <div className="images">
       {images.map((img) => (
-        <div className="image-container">
+        <div className="image-container" key={img.id}>
           <img
             className="image"
             src={img.urls.regular}
