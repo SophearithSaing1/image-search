@@ -11,7 +11,9 @@ function App() {
 
   function showErrorMessage(query) {
     if (query) {
-      setError(`There's no result for ${query}`);
+      setError(`There's no result for ${query}!`);
+    } else if (query === '') {
+      setError('Please enter keywords!');
     } else {
       setError('Something went wrong, please try again later!');
     }
