@@ -5,13 +5,15 @@ import Search from './components/Search';
 import Spinner from './components/Spinner';
 
 function App() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(null);
   const [images, setImages] = useState([]);
+  const [query, setQuery] = useState('');
 
   function search(query) {
+    setQuery(query);
     setIsLoading(true);
     fetch(
-      `https://api.unsplash.com/search/photos?client_id=${process.env.REACT_APP_UNSPLASH_ACCESS_KEY}&query=${query}`,
+      `https://api.unsplash.com/search/photos?client_id=${process.env.REACT_APP_UNSPLASH_ACCESS_KEY}&query=${query}&per_page=12`,
     )
       .then((response) => response.json())
       .then((data) => {
@@ -25,7 +27,10 @@ function App() {
       <h1>Image Search</h1>
       <Search search={search} />
       {isLoading && <Spinner />}
-      {images.length > 0 && !isLoading && <Images images={images} />}
+      {isLoading === false && images.length === 0 && (
+        <p className="no-result">There's no results for {query}</p>
+      )}
+      {isLoading === false && images.length > 0 && <Images images={images} />}
     </div>
   );
 }

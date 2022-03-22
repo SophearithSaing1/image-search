@@ -9,3 +9,9 @@ h1 {
   font-size: 48px;
   font-weight: 100;
 }
+
+.no-result {
+  margin-top: 100px;
+  text-align: center;
+  font-size: 24px;
+}
