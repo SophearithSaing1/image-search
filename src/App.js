@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import './App.css';
+import classes from './App.module.css';
 import Images from './components/Images';
 import Search from './components/Search';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress, StyledEngineProvider, Typography } from '@mui/material';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -49,19 +49,21 @@ function App() {
   }
 
   return (
-    <Box className="app">
-      <Typography variant="h3" component="h1" className="title">
-        Image Search
-      </Typography>
-      <Search search={search} />
-      {isLoading && <CircularProgress />}
-      {!isLoading && error && (
-        <Typography variant="h5" component="p" className="error">
-          {error}
+    <StyledEngineProvider injectFirst>
+      <Box className={classes.app}>
+        <Typography variant="h3" component="h1" className={classes.title}>
+          Image Search
         </Typography>
-      )}
-      {!isLoading && images.length > 0 && <Images images={images} />}
-    </Box>
+        <Search search={search} />
+        {isLoading && <CircularProgress className={classes.spinner} />}
+        {!isLoading && error && (
+          <Typography variant="h5" component="p" className={classes.error}>
+            {error}
+          </Typography>
+        )}
+        {!isLoading && images.length > 0 && <Images images={images} />}
+      </Box>
+    </StyledEngineProvider>
   );
 }
 

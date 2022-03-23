@@ -1,4 +1,4 @@
-ul.images {
+.images {
   padding: 24px;
   display: flex;
   justify-content: space-between;
@@ -10,7 +10,7 @@ ul.images {
   flex-basis: calc((100% / 3) - 16px);
 }
 
-img.image {
+.image {
   width: 100%;
   height: 100%;
   object-fit: contain !important;
