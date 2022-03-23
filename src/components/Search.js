@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './Search.css';
+import { Box, Button, TextField } from '@mui/material';
 
 function Search({ search }) {
   const [query, setQuery] = useState('');
@@ -19,19 +20,23 @@ function Search({ search }) {
   }
 
   return (
-    <div className="search">
-      <input
+    <Box className="search">
+      <TextField
         className="search--input"
-        type="text"
-        placeholder="Enter keywords"
+        label="Enter keywords"
+        variant="outlined"
         value={query}
         onChange={inputChangeHandler}
         onKeyUp={keyUpHandler}
       />
-      <button className="search--button" onClick={searchHandler}>
+      <Button
+        variant="outlined"
+        className="search--button"
+        onClick={searchHandler}
+      >
         Search
-      </button>
-    </div>
+      </Button>
+    </Box>
   );
 }
 

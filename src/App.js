@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './App.css';
 import Images from './components/Images';
 import Search from './components/Search';
-import Spinner from './components/Spinner';
+import { Box, CircularProgress, Typography } from '@mui/material';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -49,13 +49,19 @@ function App() {
   }
 
   return (
-    <div className="app">
-      <h1>Image Search</h1>
+    <Box className="app">
+      <Typography variant="h3" component="h1" className="title">
+        Image Search
+      </Typography>
       <Search search={search} />
-      {isLoading && <Spinner />}
-      {!isLoading && error && <p className="error">{error}</p>}
+      {isLoading && <CircularProgress />}
+      {!isLoading && error && (
+        <Typography variant="h5" component="p" className="error">
+          {error}
+        </Typography>
+      )}
       {!isLoading && images.length > 0 && <Images images={images} />}
-    </div>
+    </Box>
   );
 }
 

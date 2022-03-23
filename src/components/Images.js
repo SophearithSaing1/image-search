@@ -1,18 +1,19 @@
 import './Images.css';
+import { ImageList, ImageListItem } from '@mui/material';
 
 function Images({ images }) {
   return (
-    <div className="images">
+    <ImageList className="images">
       {images.map((img) => (
-        <div className="image-container" key={img.id}>
+        <ImageListItem className="image-container" key={img.id}>
           <img
             className="image"
             src={img.urls.regular}
             alt={img.alt_description}
           />
-        </div>
+        </ImageListItem>
       ))}
-    </div>
+    </ImageList>
   );
 }
 
