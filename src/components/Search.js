@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import classes from './Search.module.css';
 import { Box, Button, TextField } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { addQuery } from '../store/querySlice';
 
 function Search({ search }) {
   const [query, setQuery] = useState('');
+  const dispatch = useDispatch();
 
   function inputChangeHandler(event) {
     setQuery(event.target.value);
@@ -17,6 +20,10 @@ function Search({ search }) {
     if (event.key === 'Enter') {
       search(query);
     }
+  }
+
+  function saveQuery() {
+    dispatch(addQuery(query));
   }
 
   return (
@@ -35,6 +42,13 @@ function Search({ search }) {
         onClick={searchHandler}
       >
         Search
+      </Button>
+      <Button
+        variant="outlined"
+        className={classes['search--button']}
+        onClick={saveQuery}
+      >
+        Save
       </Button>
     </Box>
   );

@@ -2,12 +2,21 @@ import { useState } from 'react';
 import classes from './App.module.css';
 import Images from './components/Images';
 import Search from './components/Search';
-import { Box, CircularProgress, StyledEngineProvider, Typography } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  StyledEngineProvider,
+  Typography,
+} from '@mui/material';
+import Query from './components/Query';
+import { useSelector } from 'react-redux';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [images, setImages] = useState([]);
   const [error, setError] = useState(null);
+
+  const queries = useSelector((state) => state.query.value);
 
   function showErrorMessage(query) {
     if (query) {
@@ -61,7 +70,10 @@ function App() {
             {error}
           </Typography>
         )}
-        {!isLoading && images.length > 0 && <Images images={images} />}
+        <Box className={classes.content}>
+          {!isLoading && images.length > 0 && <Images images={images} />}
+          {queries.length > 0 && <Query search={search} queries={queries} />}
+        </Box>
       </Box>
     </StyledEngineProvider>
   );

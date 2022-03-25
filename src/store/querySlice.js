@@ -11,9 +11,9 @@ export const querySlice = createSlice({
     },
     clearAllQuery: (state) => {
       state.value = [];
-    }
-  }
-})
+    },
+  },
+});
 
 export const { addQuery, clearAllQuery } = querySlice.actions;
 
