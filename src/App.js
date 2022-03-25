@@ -2,12 +2,21 @@ import { useState } from 'react';
 import classes from './App.module.css';
 import Images from './components/Images';
 import Search from './components/Search';
-import { Box, CircularProgress, StyledEngineProvider, Typography } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  StyledEngineProvider,
+  Typography,
+} from '@mui/material';
+import Query from './components/Query';
+import { useSelector } from 'react-redux';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [images, setImages] = useState([]);
   const [error, setError] = useState(null);
+
+  const queries = useSelector((state) => state.query.value);
 
   function showErrorMessage(query) {
     if (query) {
@@ -21,6 +30,10 @@ function App() {
   }
 
   function search(query) {
+    if (query.trim() === '') {
+      showErrorMessage('')
+      return;
+    }
     setIsLoading(true);
     setError(null);
     setImages([]);
@@ -54,14 +67,21 @@ function App() {
         <Typography variant="h3" component="h1" className={classes.title}>
           Image Search
         </Typography>
-        <Search search={search} />
-        {isLoading && <CircularProgress className={classes.spinner} />}
-        {!isLoading && error && (
-          <Typography variant="h5" component="p" className={classes.error}>
-            {error}
-          </Typography>
-        )}
-        {!isLoading && images.length > 0 && <Images images={images} />}
+        <Search search={search} showError={showErrorMessage} />
+        <Box className={classes.content}>
+          {isLoading && (
+            <Box className={classes['spinner-container']}>
+              <CircularProgress className={classes.spinner} />
+            </Box>
+          )}
+          {!isLoading && error && (
+            <Typography variant="h5" component="p" className={classes.error}>
+              {error}
+            </Typography>
+          )}
+          {!isLoading && images.length > 0 && <Images images={images} />}
+          {queries.length > 0 && <Query search={search} queries={queries} />}
+        </Box>
       </Box>
     </StyledEngineProvider>
   );

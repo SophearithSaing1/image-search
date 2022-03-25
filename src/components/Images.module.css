@@ -1,5 +1,7 @@
 .images {
-  padding: 24px;
+  flex: 1 75%;
+  margin: 0;
+  padding: 24px 16px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
