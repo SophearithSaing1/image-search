@@ -4,7 +4,7 @@ import { Box, Button, TextField } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { addQuery } from '../store/querySlice';
 
-function Search({ search }) {
+function Search({ search, showError }) {
   const [query, setQuery] = useState('');
   const dispatch = useDispatch();
 
@@ -23,7 +23,11 @@ function Search({ search }) {
   }
 
   function saveQuery() {
-    dispatch(addQuery(query));
+    if (query.trim() === '') {
+      showError('');
+    } else {
+      dispatch(addQuery(query));
+    }
   }
 
   return (

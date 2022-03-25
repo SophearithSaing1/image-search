@@ -30,6 +30,10 @@ function App() {
   }
 
   function search(query) {
+    if (query.trim() === '') {
+      showErrorMessage('')
+      return;
+    }
     setIsLoading(true);
     setError(null);
     setImages([]);
@@ -63,14 +67,18 @@ function App() {
         <Typography variant="h3" component="h1" className={classes.title}>
           Image Search
         </Typography>
-        <Search search={search} />
-        {isLoading && <CircularProgress className={classes.spinner} />}
-        {!isLoading && error && (
-          <Typography variant="h5" component="p" className={classes.error}>
-            {error}
-          </Typography>
-        )}
+        <Search search={search} showError={showErrorMessage} />
         <Box className={classes.content}>
+          {isLoading && (
+            <Box className={classes['spinner-container']}>
+              <CircularProgress className={classes.spinner} />
+            </Box>
+          )}
+          {!isLoading && error && (
+            <Typography variant="h5" component="p" className={classes.error}>
+              {error}
+            </Typography>
+          )}
           {!isLoading && images.length > 0 && <Images images={images} />}
           {queries.length > 0 && <Query search={search} queries={queries} />}
         </Box>
