@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { clearAllQuery } from '../store/querySlice';
 
-function Query({search, queries}) {
+function Query({ onSearch, queries }) {
   const dispatch = useDispatch();
 
   function clearHandler() {
@@ -27,7 +27,7 @@ function Query({search, queries}) {
             component="p"
             className={classes['query--item']}
             key={index}
-            onClick={() => search(query)}
+            onClick={() => onSearch(query)}
           >
             {query}
           </Typography>

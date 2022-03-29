@@ -4,7 +4,7 @@ import { Box, Button, TextField } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { addQuery } from '../store/querySlice';
 
-function Search({ search, showError }) {
+function Search({ onSearch, onShowError }) {
   const [query, setQuery] = useState('');
   const dispatch = useDispatch();
 
@@ -13,18 +13,18 @@ function Search({ search, showError }) {
   }
 
   function searchHandler() {
-    search(query);
+    onSearch(query);
   }
 
   function keyUpHandler(event) {
     if (event.key === 'Enter') {
-      search(query);
+      onSearch(query);
     }
   }
 
   function saveQuery() {
     if (query.trim() === '') {
-      showError('');
+      onShowError('');
     } else {
       dispatch(addQuery(query));
     }
