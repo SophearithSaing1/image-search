@@ -1,12 +1,18 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+interface QueryState {
+  value: string[];
+}
+
+const initialState: QueryState = {
+  value: []
+}
 
 export const querySlice = createSlice({
   name: 'query',
-  initialState: {
-    value: [],
-  },
+  initialState,
   reducers: {
-    addQuery: (state, action) => {
+    addQuery: (state, action: PayloadAction<string>) => {
       state.value.push(action.payload);
     },
     clearAllQuery: (state) => {

@@ -16,7 +16,7 @@ import { RootState } from './store/store';
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [images, setImages] = useState([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   const queries = useSelector((state: RootState) => state.query.value);
 
