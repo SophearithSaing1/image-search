@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import classes from './App.module.css';
 import Images from './components/Images';
 import Search from './components/Search';
@@ -18,7 +18,7 @@ function App() {
 
   const queries = useSelector((state) => state.query.value);
 
-  function showErrorMessage(query) {
+  const showErrorMessage = useCallback((query) => {
     if (query) {
       setError(`There's no result for ${query}!`);
     } else if (query === '') {
@@ -27,39 +27,42 @@ function App() {
       setError('Something went wrong, please try again later!');
     }
     setIsLoading(false);
-  }
+  }, []);
 
-  function search(query) {
-    if (query.trim() === '') {
-      showErrorMessage('')
-      return;
-    }
-    setIsLoading(true);
-    setError(null);
-    setImages([]);
-    fetch(
-      `https://api.unsplash.com/search/photos?client_id=${process.env.REACT_APP_UNSPLASH_ACCESS_KEY}&query=${query}&per_page=12`,
-    )
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
+  const search = useCallback(
+    (query) => {
+      if (query.trim() === '') {
+        showErrorMessage('');
+        return;
+      }
+      setIsLoading(true);
+      setError(null);
+      setImages([]);
+      fetch(
+        `https://api.unsplash.com/search/photos?client_id=${process.env.REACT_APP_UNSPLASH_ACCESS_KEY}&query=${query}&per_page=12`,
+      )
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            showErrorMessage();
+          }
+        })
+        .then((data) => {
+          if (data.results.length === 0) {
+            showErrorMessage(query);
+          } else {
+            setImages(data.results);
+            setIsLoading(false);
+          }
+        })
+        .catch((error) => {
+          console.log(error.message);
           showErrorMessage();
-        }
-      })
-      .then((data) => {
-        if (data.results.length === 0) {
-          showErrorMessage(query);
-        } else {
-          setImages(data.results);
-          setIsLoading(false);
-        }
-      })
-      .catch((error) => {
-        console.log(error.message);
-        showErrorMessage();
-      });
-  }
+        });
+    },
+    [showErrorMessage],
+  );
 
   return (
     <StyledEngineProvider injectFirst>
@@ -67,7 +70,7 @@ function App() {
         <Typography variant="h3" component="h1" className={classes.title}>
           Image Search
         </Typography>
-        <Search search={search} showError={showErrorMessage} />
+        <Search onSearch={search} onShowError={showErrorMessage} />
         <Box className={classes.content}>
           {isLoading && (
             <Box className={classes['spinner-container']}>
@@ -80,7 +83,7 @@ function App() {
             </Typography>
           )}
           {!isLoading && images.length > 0 && <Images images={images} />}
-          {queries.length > 0 && <Query search={search} queries={queries} />}
+          {queries.length > 0 && <Query onSearch={search} queries={queries} />}
         </Box>
       </Box>
     </StyledEngineProvider>
