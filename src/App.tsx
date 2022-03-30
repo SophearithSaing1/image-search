@@ -12,10 +12,11 @@ import Query from './components/Query';
 import { useSelector } from 'react-redux';
 import { onSearch, onShowError } from './utils/SearchUtils';
 import { RootState } from './store/store';
+import Image from './types/Image';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState<Image[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const queries = useSelector((state: RootState) => state.query.value);
