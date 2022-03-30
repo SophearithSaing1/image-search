@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import Query from './components/Query';
 import { useSelector } from 'react-redux';
+import { onSearch, onShowError } from './utils/SearchUtils';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,51 +19,21 @@ function App() {
 
   const queries = useSelector((state) => state.query.value);
 
-  const showErrorMessage = useCallback((query) => {
-    if (query) {
-      setError(`There's no result for ${query}!`);
-    } else if (query === '') {
-      setError('Please enter keywords!');
-    } else {
-      setError('Something went wrong, please try again later!');
+  const search = useCallback(async (query) => {
+    setIsLoading(true);
+    setError(null);
+    setImages([]);
+
+    const { results, error } = await onSearch(query);
+
+    if (results) {
+      setImages(results);
+    } else if (error) {
+      setError(error);
     }
+
     setIsLoading(false);
   }, []);
-
-  const search = useCallback(
-    (query) => {
-      if (query.trim() === '') {
-        showErrorMessage('');
-        return;
-      }
-      setIsLoading(true);
-      setError(null);
-      setImages([]);
-      fetch(
-        `https://api.unsplash.com/search/photos?client_id=${process.env.REACT_APP_UNSPLASH_ACCESS_KEY}&query=${query}&per_page=12`,
-      )
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            showErrorMessage();
-          }
-        })
-        .then((data) => {
-          if (data.results.length === 0) {
-            showErrorMessage(query);
-          } else {
-            setImages(data.results);
-            setIsLoading(false);
-          }
-        })
-        .catch((error) => {
-          console.log(error.message);
-          showErrorMessage();
-        });
-    },
-    [showErrorMessage],
-  );
 
   return (
     <StyledEngineProvider injectFirst>
@@ -70,7 +41,7 @@ function App() {
         <Typography variant="h3" component="h1" className={classes.title}>
           Image Search
         </Typography>
-        <Search onSearch={search} onShowError={showErrorMessage} />
+        <Search onSearch={search} onShowError={onShowError} />
         <Box className={classes.content}>
           {isLoading && (
             <Box className={classes['spinner-container']}>

@@ -2,6 +2,7 @@ import classes from './Query.module.css';
 import { Box, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { clearAllQuery } from '../store/querySlice';
+import { useCallback } from 'react';
 
 function Query({ onSearch, queries }) {
   const dispatch = useDispatch();
@@ -9,6 +10,11 @@ function Query({ onSearch, queries }) {
   function clearHandler() {
     dispatch(clearAllQuery());
   }
+
+  const searchHandler = useCallback(
+    (query) => () => onSearch(query),
+    [onSearch],
+  );
 
   return (
     <Box className={classes.query}>
@@ -27,7 +33,7 @@ function Query({ onSearch, queries }) {
             component="p"
             className={classes['query--item']}
             key={index}
-            onClick={() => onSearch(query)}
+            onClick={searchHandler(query)}
           >
             {query}
           </Typography>
