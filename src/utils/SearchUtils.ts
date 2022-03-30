@@ -10,7 +10,7 @@ export const onShowError = (query) => {
 
 export const onSearch = async (query) => {
   if (query === null || query === undefined) {
-    return { error: onShowError() };
+    return { error: onShowError(null) };
   } else if (query.trim() === '') {
     return { error: onShowError('') };
   }
@@ -23,12 +23,12 @@ export const onSearch = async (query) => {
     const data = await response.json();
 
     if (data.results.length === 0) {
-      return { error: onShowError() };
+      return { error: onShowError(null) };
     } else {
       return { results: data.results };
     }
   } catch (error) {
     console.log(error.message);
-    return { error: onShowError() };
+    return { error: onShowError(null) };
   }
 };

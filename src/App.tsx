@@ -11,13 +11,14 @@ import {
 import Query from './components/Query';
 import { useSelector } from 'react-redux';
 import { onSearch, onShowError } from './utils/SearchUtils';
+import { RootState } from './store/store';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [images, setImages] = useState([]);
   const [error, setError] = useState(null);
 
-  const queries = useSelector((state) => state.query.value);
+  const queries = useSelector((state: RootState) => state.query.value);
 
   const search = useCallback(async (query) => {
     setIsLoading(true);
