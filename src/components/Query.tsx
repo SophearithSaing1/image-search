@@ -4,15 +4,20 @@ import { useDispatch } from 'react-redux';
 import { clearAllQuery } from '../store/querySlice';
 import { useCallback } from 'react';
 
-function Query({ onSearch, queries }) {
+interface Props {
+  onSearch: (query: string) => void;
+  queries: string[];
+}
+
+const Query: React.FC<Props> = ({ onSearch, queries }) => {
   const dispatch = useDispatch();
 
-  function clearHandler() {
+  const clearHandler = () => {
     dispatch(clearAllQuery());
   }
 
   const searchHandler = useCallback(
-    (query) => () => onSearch(query),
+    (query: string) => () => onSearch(query),
     [onSearch],
   );
 
