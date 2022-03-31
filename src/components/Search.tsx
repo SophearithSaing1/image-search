@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import classes from './Search.module.css';
 import { Button, TextField } from '@mui/material';
 import { useDispatch } from 'react-redux';
@@ -13,22 +13,28 @@ const Search: React.FC<Props> = ({ onSearch, onShowError }) => {
   const [query, setQuery] = useState('');
   const dispatch = useDispatch();
 
-  function inputChangeHandler(event: React.ChangeEvent<HTMLInputElement>) {
-    setQuery(event.target.value);
-  }
+  const inputChangeHandler = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setQuery(event.target.value);
+    },
+    []
+  );
 
-  function searchHandler(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    onSearch(query);
-  }
+  const searchHandler = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      onSearch(query);
+    },
+    [onSearch, query]
+  );
 
-  function saveQuery() {
+  const saveQuery = useCallback(() => {
     if (query.trim() === '') {
       onShowError('');
     } else {
       dispatch(addQuery(query));
     }
-  }
+  }, [dispatch, onShowError, query]);
 
   return (
     <form className={classes.search} onSubmit={searchHandler}>

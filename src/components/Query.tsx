@@ -12,13 +12,15 @@ interface Props {
 const Query: React.FC<Props> = ({ onSearch, queries }) => {
   const dispatch = useDispatch();
 
-  const clearHandler = () => {
+  const clearHandler = useCallback(() => {
     dispatch(clearAllQuery());
-  }
+  }, [dispatch]);
 
   const searchHandler = useCallback(
-    (query: string) => () => onSearch(query),
-    [onSearch],
+    (query: string) => {
+      return () => onSearch(query);
+    },
+    [onSearch]
   );
 
   return (
@@ -45,6 +47,6 @@ const Query: React.FC<Props> = ({ onSearch, queries }) => {
         ))}
     </Box>
   );
-}
+};
 
 export default Query;
