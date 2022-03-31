@@ -12,10 +12,10 @@ export const querySlice = createSlice({
   name: 'query',
   initialState,
   reducers: {
-    addQuery: (state, action: PayloadAction<string>) => {
+    addQuery: (state: QueryState, action: PayloadAction<string>) => {
       state.value.push(action.payload);
     },
-    clearAllQuery: (state) => {
+    clearAllQuery: (state: QueryState) => {
       state.value = [];
     },
   },
