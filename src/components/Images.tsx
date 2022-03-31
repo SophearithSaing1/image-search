@@ -1,7 +1,12 @@
-import classes from './Images.module.css'
+import classes from './Images.module.css';
 import { ImageList, ImageListItem } from '@mui/material';
+import Image from '../types/Image';
 
-function Images({ images }) {
+interface Props {
+  images: Image[];
+}
+
+const Images: React.FC<Props> = ({ images }) => {
   return (
     <ImageList className={classes.images}>
       {images.map((img) => (
@@ -15,6 +20,6 @@ function Images({ images }) {
       ))}
     </ImageList>
   );
-}
+};
 
 export default Images;

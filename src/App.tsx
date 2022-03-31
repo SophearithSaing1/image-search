@@ -10,16 +10,18 @@ import {
 } from '@mui/material';
 import Query from './components/Query';
 import { useSelector } from 'react-redux';
-import { onSearch, onShowError } from './utils/SearchUtils';
+import { onSearch, onGetErrorMessage } from './utils/SearchUtils';
+import { RootState } from './store/store';
+import Image from './types/Image';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
-  const [images, setImages] = useState([]);
-  const [error, setError] = useState(null);
+  const [images, setImages] = useState<Image[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
-  const queries = useSelector((state) => state.query.value);
+  const queries = useSelector((state: RootState) => state.query.value);
 
-  const search = useCallback(async (query) => {
+  const search = useCallback(async (query: string) => {
     setIsLoading(true);
     setError(null);
     setImages([]);
@@ -41,7 +43,7 @@ function App() {
         <Typography variant="h3" component="h1" className={classes.title}>
           Image Search
         </Typography>
-        <Search onSearch={search} onShowError={onShowError} />
+        <Search onSearch={search} onShowError={onGetErrorMessage} />
         <Box className={classes.content}>
           {isLoading && (
             <Box className={classes['spinner-container']}>

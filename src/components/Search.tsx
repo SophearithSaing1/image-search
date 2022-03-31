@@ -1,49 +1,54 @@
-import { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import classes from './Search.module.css';
-import { Box, Button, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { addQuery } from '../store/querySlice';
 
-function Search({ onSearch, onShowError }) {
+interface Props {
+  onSearch: (query: string) => void;
+  onShowError: (query: string) => void;
+}
+
+const Search: React.FC<Props> = ({ onSearch, onShowError }) => {
   const [query, setQuery] = useState('');
   const dispatch = useDispatch();
 
-  function inputChangeHandler(event) {
-    setQuery(event.target.value);
-  }
+  const inputChangeHandler = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setQuery(event.target.value);
+    },
+    []
+  );
 
-  function searchHandler() {
-    onSearch(query);
-  }
-
-  function keyUpHandler(event) {
-    if (event.key === 'Enter') {
+  const searchHandler = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
       onSearch(query);
-    }
-  }
+    },
+    [onSearch, query]
+  );
 
-  function saveQuery() {
+  const saveQuery = useCallback(() => {
     if (query.trim() === '') {
       onShowError('');
     } else {
       dispatch(addQuery(query));
     }
-  }
+  }, [dispatch, onShowError, query]);
 
   return (
-    <Box className={classes.search}>
+    <form className={classes.search} onSubmit={searchHandler}>
       <TextField
         className={classes['search--input']}
         label="Enter keywords"
         variant="outlined"
         value={query}
         onChange={inputChangeHandler}
-        onKeyUp={keyUpHandler}
       />
       <Button
+        type="submit"
         variant="outlined"
         className={classes['search--button']}
-        onClick={searchHandler}
       >
         Search
       </Button>
@@ -54,8 +59,8 @@ function Search({ onSearch, onShowError }) {
       >
         Save
       </Button>
-    </Box>
+    </form>
   );
-}
+};
 
 export default Search;

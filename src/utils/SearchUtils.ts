@@ -1,4 +1,4 @@
-export const onShowError = (query) => {
+export const onGetErrorMessage = (query: string | null) => {
   if (query) {
     return `There's no result for ${query}!`;
   } else if (query === '') {
@@ -8,11 +8,11 @@ export const onShowError = (query) => {
   }
 };
 
-export const onSearch = async (query) => {
+export const onSearch = async (query: string) => {
   if (query === null || query === undefined) {
-    return { error: onShowError() };
+    return { error: onGetErrorMessage(null) };
   } else if (query.trim() === '') {
-    return { error: onShowError('') };
+    return { error: onGetErrorMessage('') };
   }
 
   try {
@@ -23,12 +23,12 @@ export const onSearch = async (query) => {
     const data = await response.json();
 
     if (data.results.length === 0) {
-      return { error: onShowError() };
+      return { error: onGetErrorMessage(null) };
     } else {
       return { results: data.results };
     }
-  } catch (error) {
+  } catch (error: any) {
     console.log(error.message);
-    return { error: onShowError() };
+    return { error: onGetErrorMessage(null) };
   }
 };
