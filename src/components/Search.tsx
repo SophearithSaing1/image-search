@@ -1,25 +1,25 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import classes from './Search.module.css';
-import { Box, Button, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { addQuery } from '../store/querySlice';
 
-function Search({ onSearch, onShowError }) {
+interface Props {
+  onSearch: (query: string) => void;
+  onShowError: (query: string) => void;
+}
+
+const Search: React.FC<Props> = ({ onSearch, onShowError }) => {
   const [query, setQuery] = useState('');
   const dispatch = useDispatch();
 
-  function inputChangeHandler(event) {
+  function inputChangeHandler(event: React.ChangeEvent<HTMLInputElement>) {
     setQuery(event.target.value);
   }
 
-  function searchHandler() {
+  function searchHandler(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     onSearch(query);
-  }
-
-  function keyUpHandler(event) {
-    if (event.key === 'Enter') {
-      onSearch(query);
-    }
   }
 
   function saveQuery() {
@@ -31,19 +31,18 @@ function Search({ onSearch, onShowError }) {
   }
 
   return (
-    <Box className={classes.search}>
+    <form className={classes.search} onSubmit={searchHandler}>
       <TextField
         className={classes['search--input']}
         label="Enter keywords"
         variant="outlined"
         value={query}
         onChange={inputChangeHandler}
-        onKeyUp={keyUpHandler}
       />
       <Button
+        type="submit"
         variant="outlined"
         className={classes['search--button']}
-        onClick={searchHandler}
       >
         Search
       </Button>
@@ -54,8 +53,8 @@ function Search({ onSearch, onShowError }) {
       >
         Save
       </Button>
-    </Box>
+    </form>
   );
-}
+};
 
 export default Search;
