@@ -8,7 +8,7 @@ export const onGetErrorMessage = (query: string | null) => {
   }
 };
 
-export const onSearch = async (query: string) => {
+export const onSearch = async (query?: string) => {
   if (query === null || query === undefined) {
     return { error: onGetErrorMessage(null) };
   } else if (query.trim() === '') {
